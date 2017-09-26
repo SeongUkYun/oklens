@@ -132,82 +132,30 @@
                         <div class="carousel-inner">
                             <div class="item active">
                                 <div class="row">
+                                    {% for news in page1 %}
                                     <div class="col-xs-4">
                                         <div class="portfolio-item">
                                             <div class="item-inner">
-						<a href="/blog/コンタクトレンズ増える角膜感染症汚れによる傷が原因失明も/">
-                                                <h5>
-                                                    ＜コンタクトレンズ＞増える角膜感染症汚れによる傷が原因、失明も
-                                                </h5>
-						</a>
+                                              <div>{{ news.description }}</div>
+                                              <a href="/blog/{{ news.slug }}/"><h5>{{ news.title }}</h5></a>
                                             </div>
                                         </div>
                                     </div>                            
-                                    <div class="col-xs-4">
-                                        <div class="portfolio-item">
-                                            <div class="item-inner">
-						<a href="/blog/myopia-control-studyーオルソケラトロジーレンズによる近視の抑制に関して/">
-                                                <h5>
-						    MYOPIA CONTROL STUDYーオルソケラトロジーレンズによる近視の抑制に関して
-                                                </h5>
-						</a>
-                                            </div>
-                                        </div>
-                                    </div>                            
-                                    <div class="col-xs-4">
-                                        <div class="portfolio-item">
-                                            <div class="item-inner">
-						<a href="/blog/サイトリニュアル/">
-                                                <h5>
-						    サイトリニュアル
-                                                </h5>
-						</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div><!--/.row-->
                             </div><!--/.item-->
                             <div class="item">
                                 <div class="row">
+                                    {% for news in page2 %}
                                     <div class="col-xs-4">
                                         <div class="portfolio-item">
                                             <div class="item-inner">
-                                                <img class="img-responsive" src="{% static "images/portfolio/recent/item2.png" %}" alt="">
-                                                <h5>
-                                                    Flat Theme - Business Theme
-                                                </h5>
-                                                <div class="overlay">
-                                                    <a class="preview btn btn-danger" title="Malesuada fames ac turpis egestas" href="{% static  "images/portfolio/full/item1.jpg" %}" rel="prettyPhoto"><i class="icon-eye-open"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="portfolio-item">
-                                            <div class="item-inner">
-                                                <img class="img-responsive" src="{% static "images/portfolio/recent/item1.png" %}" alt="">
-                                                <h5>
-                                                    Nova - Corporate site template
-                                                </h5>
-                                                <div class="overlay">
-                                                    <a class="preview btn btn-danger" title="Malesuada fames ac turpis egestas" href="{% static  "images/portfolio/full/item1.jpg" %}" rel="prettyPhoto"><i class="icon-eye-open"></i></a>
-                                                </div>
+                                              <div>{{ news.description }}</div>
+                                              <a href="/blog/{{ news.slug }}/"><h5>{{ news.title }}</h5></a>
                                             </div>
                                         </div>
                                     </div>                            
-                                    <div class="col-xs-4">
-                                        <div class="portfolio-item">
-                                            <div class="item-inner">
-                                                <img class="img-responsive" src="{% static "images/portfolio/recent/item3.png" %}" alt="">
-                                                <h5>
-                                                    Fornax - Apps site template
-                                                </h5>
-                                                <div class="overlay">
-                                                    <a class="preview btn btn-danger" title="Malesuada fames ac turpis egestas" href="{% static  "images/portfolio/full/item1.jpg" %}" rel="prettyPhoto"><i class="icon-eye-open"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div><!--/.item-->
                         </div>
