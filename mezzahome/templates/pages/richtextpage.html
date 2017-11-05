@@ -1,11 +1,27 @@
 {% extends "pages/page.html" %}
 
-{% load mezzanine_tags %}
+{% load mezzanine_tags page_tags %}
+
+{% block left_panel %}
+{% endblock %}
 
 {% block main %}{{ block.super }}
 <section  class="container">
+  <div class="col-md-{% block left_width %}4{% endblock %} left">
+{% if request.path|is_doctors %}
+      <div class="panel panel-default tree">{% get_child_pages "includes/custom_menu_tree.html" 16 %}</div>
+  </div>
+  <div class="col-md-8">
+{% elif request.path|is_patient %}
+      <div class="panel panel-default tree">{% get_child_pages "includes/custom_menu_tree.html" 14 %}</div>
+  </div>
+  <div class="col-md-8">
+{% else %}
+  <div class="col-md-12">
+{% endif %}
 {% editable page.richtextpage.content %}
 {{ page.richtextpage.content|richtext_filters|safe }}
 {% endeditable %}
+  </div>
 </section>
 {% endblock %}
