@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, unicode_literals
 import os
@@ -92,7 +93,7 @@ USE_MODELTRANSLATION = False
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dev.aravim',]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -149,9 +150,9 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 DATABASES = {
     "default": {
         # Add "postgresql_psycopg2", "mysql", "sqlite3" or "oracle".
-        "ENGINE": "sqlite3",
+        "ENGINE": "django.db.backends.sqlite3",
         # DB name or path to database file if using sqlite3.
-        "NAME": "",
+        "NAME": "mezzahome.data",
         # Not used with sqlite3.
         "USER": "",
         # Not used with sqlite3.
@@ -341,3 +342,13 @@ except ImportError:
     pass
 else:
     set_dynamic_settings(globals())
+
+
+ORIGIN_FABRIC = {
+    "HOSTS": ["dev.aravim"], # 배포하려는 서버의 도메인명(혹은 IP)
+    "SSH_USER": "ubuntu",
+    "LOCALE": "ja_JP.UTF-8",
+    "SSH_KEY": "~/.ssh/aws.pem",
+    "REPO_URL": "git@github.com:SeongUkYun/oklens.git",
+    "ALLOW_HOST": "172.31.33.233",
+}

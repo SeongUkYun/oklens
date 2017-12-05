@@ -48,7 +48,7 @@ env.db_pass = conf.get("DB_PASS", None)
 env.admin_pass = conf.get("ADMIN_PASS", None)
 env.user = conf.get("SSH_USER", getuser())
 env.password = conf.get("SSH_PASS", None)
-env.key_filename = conf.get("SSH_KEY_PATH", None)
+env.key_filename = conf.get("SSH_KEY", None)
 env.hosts = conf.get("HOSTS", [""])
 
 env.proj_name = conf.get("PROJECT_NAME", env.proj_app)
@@ -278,12 +278,14 @@ def rsync_upload():
 
 
 def vcs_upload():
+    print("|---> hogehoge")
     """
     Uploads the project with the selected VCS tool.
     """
     if env.deploy_tool == "git":
         remote_path = "ssh://%s@%s%s" % (env.user, env.host_string,
                                          env.repo_path)
+        print('|--->', remote_path)
         if not exists(env.repo_path):
             run("mkdir -p %s" % env.repo_path)
             with cd(env.repo_path):
@@ -395,6 +397,12 @@ def static():
     """
     Returns the live STATIC_ROOT directory.
     """
+    print("in static()")
+    print("---------------------------------")
+    print(python("from django.conf import settings;print(settings.STATIC_ROOT)", show=False))
+    print("---------------------------------")
+    print(python("from django.conf import settings;print(settings.STATIC_ROOT)", show=True))
+    print("---------------------------------")
     return python("from django.conf import settings;"
                   "print(settings.STATIC_ROOT)", show=False).split("\n")[-1]
 
@@ -491,12 +499,15 @@ def create():
         run("virtualenv %s" % env.proj_name)
 
     # Upload project files
+    print('|--->', env.deploy_tool)
+    print('|--->', env.vcs_tools)
     if env.deploy_tool in env.vcs_tools:
         vcs_upload()
     else:
         rsync_upload()
 
     # Create DB and DB user
+    '''
     pw = db_pass()
     user_sql_args = (env.proj_name, pw.replace("'", "\'"))
     user_sql = "CREATE USER %s WITH ENCRYPTED PASSWORD '%s';" % user_sql_args
@@ -506,6 +517,7 @@ def create():
     psql("CREATE DATABASE %s WITH OWNER %s ENCODING = 'UTF8' "
          "LC_CTYPE = '%s' LC_COLLATE = '%s' TEMPLATE template0;" %
          (env.proj_name, env.proj_name, env.locale, env.locale))
+    '''
 
     # Set up SSL certificate
     if not env.ssl_disabled:
@@ -607,6 +619,7 @@ def deploy():
     the database, collect any new static assets, and restart gunicorn's worker
     processes for the project.
     """
+    print('|---> 1')
     if not exists(env.proj_path):
         if confirm("Project does not exist in host server: %s"
                    "\nWould you like to create it?" % env.proj_name):
@@ -614,18 +627,28 @@ def deploy():
         else:
             abort()
 
+    print('|---> 2')
     # Backup current version of the project
     with cd(env.proj_path):
         backup("last.db")
+    print('|---> 3')
+    print('|---> deploy_tool', env.deploy_tool)
+    print('|---> deploy_tools', env.vcs_tools)
+    print('|---> repo_path', env.repo_path)
     if env.deploy_tool in env.vcs_tools:
         with cd(env.repo_path):
             if env.deploy_tool == "git":
                     run("git rev-parse HEAD > %s/last.commit" % env.proj_path)
             elif env.deploy_tool == "hg":
                     run("hg id -i > last.commit")
+        print('|---> 3-1')
+        print('|---> env.proj_path', env.proj_path)
         with project():
+            print('|---> in with project()')
             static_dir = static()
+            print('|---> 3-2')
             if exists(static_dir):
+                print('|---> 3-3')
                 run("tar -cf static.tar --exclude='*.thumbnails' %s" %
                     static_dir)
     else:
@@ -634,18 +657,23 @@ def deploy():
             exclude_arg = " ".join("--exclude='%s'" % e for e in excludes)
             run("tar -cf {0}.tar {1} {0}".format(env.proj_name, exclude_arg))
 
+    print('|---> 4')
     # Deploy latest version of the project
     with update_changed_requirements():
         if env.deploy_tool in env.vcs_tools:
             vcs_upload()
         else:
             rsync_upload()
+    print('|---> 5')
     with project():
         manage("collectstatic -v 0 --noinput")
         manage("migrate --noinput")
+    print('|---> 6')
     for name in get_templates():
         upload_template_and_reload(name)
+    print('|---> 7')
     restart()
+    print('|---> 8')
     return True
 
 
