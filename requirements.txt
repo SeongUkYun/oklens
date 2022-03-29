@@ -19,7 +19,7 @@ ipaddress==1.0.18
 Mezzanine==4.2.3
 oauthlib==2.0.2
 olefile==0.44
-paramiko==2.4.0
+paramiko==2.10.1
 Pillow==4.2.1
 pyasn1==0.4.2
 pycparser==2.18
